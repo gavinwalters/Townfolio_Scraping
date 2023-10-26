@@ -21,6 +21,7 @@ driver.maximize_window()
 links = driver.find_elements("xpath", "//a")
 for link in links:
     print("1")
+    # If link is Download button, click it
     if "Download" in link.get_attribute("innerHTML"):
         link.click()
         print("click")
@@ -28,6 +29,7 @@ for link in links:
     
         buttons = driver.find_elements("xpath", "//button")
         for button in buttons:
+            # Download excel file
             if "Excel" in button.get_attribute("innerHTML"):
                 button.click()
                 print("button")
