@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 import time
 import os
 import pandas as pd
@@ -17,18 +18,21 @@ def searchTown(driver, community):
     #search community by input
 
 
+    clearSearch = driver.find_element(By.NAME, "query").clear()
     search = driver.find_element(By.NAME, "query").send_keys(community)
     driver.find_element("xpath","//button[contains(text(), 'Search')]").click()
-    driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
-    # townLink = driver.find_element("xpath","//a[contains(text(), \""+community+"\")]")
-    # if townLink.Exists():
-    #     driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
-    # else:
-    #     print("Sorry that community wasn't found, try again!")
-    #     community=input('Please enter a community to search: ')
-    #     search = driver.find_element(By.NAME, "query").send_keys(community)
-    #     driver.find_element("xpath","//button[contains(text(), 'Search')]").click()
+    # driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
+    selectTown(driver, community)
     
+def selectTown(driver, community):
+    townLink = driver.find_elements("xpath","//a[contains(text(), \""+community+"\")]")
+    if len(townLink) > 0:
+        driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
+        return
+    else:
+        print("Sorry that community wasn't found, try again!")
+        community=input('Please enter a community to search: ')
+        searchTown(driver, community)
 
 def DLExcel(driver):
 
@@ -81,6 +85,7 @@ def main():
     driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()), options=options)
     
     searchTown(driver, community)
+    # selectTown(driver, community)
     time.sleep(5.5)    # Pause 5.5 seconds
     DLExcel(driver)
     driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
