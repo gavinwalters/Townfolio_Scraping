@@ -14,7 +14,7 @@ options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()), options=options)
 
 # Open townfolio in Chrome
-driver.get("https://townfolio.co/nl/whitbourne/demographics")
+driver.get("https://townfolio.co/nl/whitbourne/labour-force")
 driver.maximize_window()
 
 # search all a tags in dom

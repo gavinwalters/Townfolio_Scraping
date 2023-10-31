@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-directory = '/Users/gavin/Documents/Townfolio data'
+directory = '/Users/gavin/Documents/Townfolio data/Whitbourne'
 
 for file in os.listdir(directory):
     if file.endswith('.xlsx'):

@@ -26,7 +26,7 @@ search = driver.find_element(By.NAME, "query").send_keys(community)
 driver.find_element("xpath","//button[contains(text(), 'Search')]").click()
 driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
 
-
+driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
 
 
 
