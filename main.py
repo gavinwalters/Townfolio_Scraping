@@ -71,11 +71,11 @@ def DLExcel(driver):
         # search all a tags in dom
         links = driver.find_elements("xpath", "//a")
         for link in links:
-            print('DL')
+            # print('DL')
             # If link is Download button, click it
             if "Download" in link.get_attribute("innerHTML"):
                 link.click()
-                print("click")
+                # print("click")
 
             
                 buttons = driver.find_elements("xpath", "//button")
@@ -83,7 +83,7 @@ def DLExcel(driver):
                     # Download excel file
                     if "Excel" in button.get_attribute("innerHTML"):
                         button.click()
-                        print("button")
+                        print("DL Excel")
                         close = driver.find_element(By.CLASS_NAME, "tf-dialog__actions")
                         close.click()
 
@@ -97,9 +97,9 @@ def readData(community):
             with open(os.path.join(path, file_name), 'a') as fp:
                 fp.write(os.path.splitext(file)[0]+"\n")
                 fp.write(str(pd.read_excel(filepath)) + "\n")
-            print(file)
-            
-            print(pd.read_excel(filepath))
+            # print(file)
+    print("Data File for " + community + " Created")
+            # print(pd.read_excel(filepath))
 
 
 
@@ -119,9 +119,10 @@ def main():
         cont = selectTown(driver, town)
         if cont:
             skippedList.append(town)
+            print("SKIP")
             continue
-
-        time.sleep(1)    # Pause 5.5 seconds
+        print("NOW SCRAPING "+ town)
+        time.sleep(3)    # Pause 5.5 seconds
         # print(driver)
         # DLExcel(driver)
         driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
@@ -152,7 +153,9 @@ def main():
         time.sleep(1)
         DLExcel(driver)
         readData(town)
+        print("DRIVER QUIT")
         driver.quit()
+        time.sleep(1)
     
     path = r'/Users/gavin/Documents/Townfolio data/'
     file_name = 'skipped.txt'
