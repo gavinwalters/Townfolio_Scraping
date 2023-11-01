@@ -149,6 +149,12 @@ def main():
         DLExcel(driver)
         readData(community)
         driver.quit()
+    
+    path = r'/Users/gavin/Documents/Townfolio data/'
+    file_name = 'skipped.txt'
+    with open(os.path.join(path, file_name), 'a') as fp:
+        for town in skippedList:
+            fp.write(str(town))
 
 
 if __name__ == "__main__":
