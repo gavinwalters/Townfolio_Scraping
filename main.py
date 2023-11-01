@@ -7,9 +7,27 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import time
 import os
+import psutil
 import pandas as pd
 
-def searchTown(driver, community):
+def initDriver(community):
+
+    #def options and driver
+    options = Options()
+    prefs = {'download.default_directory' : '/Users/gavin/Documents/Townfolio data/' + community}
+    options.add_experimental_option('prefs', prefs)
+    # stop browser from closing after run
+    options.add_experimental_option("detach", True)
+
+    driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()), options=options)
+    return driver
+def searchTown():
+    
+    #input community
+
+    community=input('Please enter a community to search: ')
+
+    driver = initDriver(community)
 
     # Open townfolio in Chrome
     driver.get("https://townfolio.co/find-community-data?country=CA&region=NL&population=all&keyword=")
@@ -22,7 +40,8 @@ def searchTown(driver, community):
     search = driver.find_element(By.NAME, "query").send_keys(community)
     driver.find_element("xpath","//button[contains(text(), 'Search')]").click()
     # driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
-    selectTown(driver, community)
+    # selectTown(driver, community)
+    return driver, community
     
 def selectTown(driver, community):
     townLink = driver.find_elements("xpath","//a[contains(text(), \""+community+"\")]")
@@ -31,8 +50,16 @@ def selectTown(driver, community):
         return
     else:
         print("Sorry that community wasn't found, try again!")
-        community=input('Please enter a community to search: ')
-        searchTown(driver, community)
+        driver.quit()
+        PROCNAME = "chromedriver"
+        for proc in psutil.process_iter():
+            # check whether the process name matches
+            if proc.name() == PROCNAME:
+                proc.kill()
+        print("driver quit")
+        # driver, community = searchTown()
+        # print("new search done")
+        return True
 
 def DLExcel(driver):
 
@@ -72,21 +99,17 @@ def readData(community):
 
 
 def main():
-    #input community
-
-    community=input('Please enter a community to search: ')
-    #def options and driver
-        # stop browser from closing after run
-    options = Options()
-    prefs = {'download.default_directory' : '/Users/gavin/Documents/Townfolio data/' + community}
-    options.add_experimental_option('prefs', prefs)
-    options.add_experimental_option("detach", True)
-
-    driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()), options=options)
+    cont = True
     
-    searchTown(driver, community)
-    # selectTown(driver, community)
+    while cont:
+        driver, community = searchTown()
+        cont = selectTown(driver, community)
+
     time.sleep(5.5)    # Pause 5.5 seconds
+    # print(driver)
+    # DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
+    time.sleep(5.5)
     DLExcel(driver)
     driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
     time.sleep(5.5)
