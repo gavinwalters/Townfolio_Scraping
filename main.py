@@ -17,6 +17,8 @@ def initDriver(community):
     options = Options()
     prefs = {'download.default_directory' : '/Users/gavin/Documents/Townfolio data/' + community}
     options.add_experimental_option('prefs', prefs)
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--start-maximized")
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     # stop browser from closing after run
