@@ -9,6 +9,7 @@ import time
 import os
 import psutil
 import pandas as pd
+import scrape_towns
 
 def initDriver(community):
 
@@ -21,11 +22,11 @@ def initDriver(community):
 
     driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()), options=options)
     return driver
-def searchTown():
+def searchTown(community):
     
     #input community
 
-    community=input('Please enter a community to search: ')
+    # community=input('Please enter a community to search: ')
 
     driver = initDriver(community)
 
@@ -41,7 +42,7 @@ def searchTown():
     driver.find_element("xpath","//button[contains(text(), 'Search')]").click()
     # driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
     # selectTown(driver, community)
-    return driver, community
+    return driver
     
 def selectTown(driver, community):
     townLink = driver.find_elements("xpath","//a[contains(text(), \""+community+"\")]")
@@ -49,7 +50,7 @@ def selectTown(driver, community):
         driver.find_element("xpath","//a[contains(text(), \""+community+"\")]").click()
         return
     else:
-        print("Sorry that community wasn't found, try again!")
+        print("Sorry " + community + " wasn't found, on to the next!")
         driver.quit()
         PROCNAME = "chromedriver"
         for proc in psutil.process_iter():
@@ -100,42 +101,54 @@ def readData(community):
 
 def main():
     cont = True
-    
-    while cont:
-        driver, community = searchTown()
-        cont = selectTown(driver, community)
+    townList = scrape_towns.townList()
 
-    time.sleep(5.5)    # Pause 5.5 seconds
-    # print(driver)
-    # DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Taxation')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Quality of Life')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Real Estate')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Transportation')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Education')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Utilities')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    driver.find_element("xpath", "//span[contains(text(), 'Companies')]").click()
-    time.sleep(5.5)
-    DLExcel(driver)
-    readData(community)
+    # driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install()))
+    # driver.get("driver = webdriver.Chrome(service =  Service(ChromeDriverManager().install())")
+    # towns = driver.find_elements("xpath", "//h3")
+    # for town in towns:
+    #     print(town.get_attribute("innerHTML"))
+    # driver.quit()
+    skippedList = []
+    for town in townList:
+        driver = searchTown(town)
+        cont = selectTown(driver, town)
+        if cont:
+            skippedList.append(town)
+            continue
+
+        time.sleep(5.5)    # Pause 5.5 seconds
+        # print(driver)
+        # DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Taxation')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Quality of Life')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Real Estate')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Transportation')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Education')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Utilities')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        driver.find_element("xpath", "//span[contains(text(), 'Companies')]").click()
+        time.sleep(5.5)
+        DLExcel(driver)
+        readData(community)
+        driver.quit()
 
 
 if __name__ == "__main__":
