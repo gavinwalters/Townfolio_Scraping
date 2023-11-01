@@ -151,7 +151,7 @@ def main():
         driver.find_element("xpath", "//span[contains(text(), 'Companies')]").click()
         time.sleep(1)
         DLExcel(driver)
-        readData(community)
+        readData(town)
         driver.quit()
     
     path = r'/Users/gavin/Documents/Townfolio data/'
