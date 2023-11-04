@@ -101,6 +101,36 @@ def readData(community):
     print("Data File for " + community + " Created")
             # print(pd.read_excel(filepath))
 
+def pageChange(driver):
+    driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Taxation')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Quality of Life')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Real Estate')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Transportation')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Education')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Utilities')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+    driver.find_element("xpath", "//span[contains(text(), 'Companies')]").click()
+    time.sleep(2)
+    DLExcel(driver)
+
+
 
 
 def main():
@@ -125,37 +155,19 @@ def main():
         time.sleep(3)    # Pause 5.5 seconds
         # print(driver)
         # DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Demographics')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Labour Force')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Taxation')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Quality of Life')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Real Estate')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Transportation')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Education')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Utilities')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        driver.find_element("xpath", "//span[contains(text(), 'Companies')]").click()
-        time.sleep(2)
-        DLExcel(driver)
-        readData(town)
+        try:
+            pageChange(driver)
+        except:
+            pageChange(driver)
+        try:
+            readData(town)
+        except:
+            readData(town)
+
         print("DRIVER QUIT")
         driver.quit()
         time.sleep(1)
+        
     
     path = r'/Users/gavin/Documents/Townfolio data/'
     file_name = 'skipped.txt'
