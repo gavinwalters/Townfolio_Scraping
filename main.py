@@ -144,6 +144,13 @@ def main():
     #     print(town.get_attribute("innerHTML"))
     # driver.quit()
     skippedList = []
+    directory = '/Users/gavin/Documents/Townfolio data/'
+    existingTowns = []
+    for file in os.listdir(directory):
+        existingTowns.append(file)
+    for folder in existingTowns:
+        if folder in townList:
+            townList.remove(folder)
     for town in townList:
         driver = searchTown(town)
         cont = selectTown(driver, town)
