@@ -164,12 +164,16 @@ def main():
         # DLExcel(driver)
         try:
             pageChange(driver)
+        except NoSuchElementException:
+            continue
         except:
             pageChange(driver)
+
         try:
             readData(town)
         except:
             readData(town)
+            
 
         print("DRIVER QUIT")
         driver.quit()
